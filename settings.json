@@ -1,0 +1,16 @@
+{
+	"github":{
+		"repo":[{"name":"cloudfoundry/cf-release"}],
+		"user":"cloudfoundry"
+	},
+	"slack":{
+		"token":""
+	},
+	"google":{
+		"resultsPerPage":50
+	},
+	"zendesk":{
+		"user":"",
+		"password":""
+	}
+}

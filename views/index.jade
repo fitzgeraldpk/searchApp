@@ -1,0 +1,82 @@
+extends layout
+
+block content
+	p(style='white-space:pre;')
+	include ./includes/search.jade
+	p(style='white-space:pre;')
+	if error
+		p #{error}
+	else
+	p(style='white-space:pre;')
+		if result
+			div.row
+				h3#searchTerm <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> Results for search term: #{result.userQuery}
+			div.row
+				div.col-md-12
+					ul#searchResultsNav(class="nav nav-tabs")
+						li(role="presentation" class="active")
+							a(data-toggle="tab" href="#github") GitHub
+						li(role="presentation") 
+							a(data-toggle="tab" href="#slack") Slack
+						li(role="presentation") 
+							a(data-toggle="tab" href="#support") Pivotal Support Documents
+						li(role="presentation") 
+							a(data-toggle="tab" href="#zendesk") Zendesk
+			div.row
+				div.col-md-9
+					div(class="tab-content")
+						div#github(class="tab-pane fade in active")
+							p.resultTabIntro Currently searching the gitHub user 
+								strong Cloudfoundry only!!!
+								table(class="table" id="resultsTable")
+									thead
+										th Respository
+										th File Url
+									tbody
+										each val, index in result.github.items
+											tr
+												td #{result.github.items[index].repository.name}
+												td 
+													a(href='#{result.github.items[index].html_url}') #{result.github.items[index].name}
+												td
+						div#slack(class="tab-pane fade")   
+							p.resultTabIntro  Slack Results #{result.slack.messages.total} messages found. 
+								strong Showing the first 100 only.
+								table(class="table" id="resultsTable")
+									thead
+										th Channel
+										th First Message
+									tbody
+										each val, index in result.slack.messages.matches
+											tr
+												td 
+													a(href='#{result.slack.messages.matches[index].permalink}') #{result.slack.messages.matches[index].channel.name}
+												td #{result.slack.messages.matches[index].text}
+						div#zendesk(class="tab-pane fade") 
+							p.resultTabIntro 
+								table(class="table" id="resultsTable")
+									thead
+										th Zendesk Ticket Subject
+										th Status
+										th Priority
+									tbody
+										each val, index in result.zendesk
+											tr
+												td 
+													a(href='https://discuss.zendesk.com/agent/tickets/#{result.zendesk[index].id}') #{result.zendesk[index].subject}
+												td  #{result.zendesk[index].status}
+												td  #{result.zendesk[index].priority}
+						div#support(class="tab-pane fade") 
+							p.resultTabIntro  Results from support.pivotal.io & docs.pivotal.io/pivotalcf
+								table(class="table" id="resultsTable")
+									thead
+										th Website
+										th Search Result
+									tbody
+										each val, index in result.google
+											tr
+												td #{result.google[index].site}
+												td 
+													a(href='#{result.google[index].url}') #{result.google[index].title}
+		else
+			H2 Welcome to GSS Integrated search
